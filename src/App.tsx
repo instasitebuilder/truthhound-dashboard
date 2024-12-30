@@ -6,7 +6,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Broadcasts from "./pages/Broadcasts";
 
-const queryClient = new QueryClient();
+// Create a QueryClient instance
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Disable automatic refetching to prevent unnecessary network requests
+      refetchOnWindowFocus: false,
+      // Set a default stale time of 5 minutes
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
