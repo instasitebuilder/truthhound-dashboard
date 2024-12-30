@@ -1,43 +1,21 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { StatsOverview } from "@/components/StatsOverview";
 import { BroadcastList } from "@/components/BroadcastList";
-import type { DashboardStats, Broadcast } from "@/types";
-
-const mockStats: DashboardStats = {
-  totalBroadcasts: 150,
-  verifiedCount: 85,
-  falseCount: 45,
-  pendingCount: 20,
-};
-
-const mockBroadcasts: Broadcast[] = [
-  {
-    id: 1,
-    content: "New study shows significant climate change impact in coastal regions",
-    source: "Climate Research Institute",
-    timestamp: "2 hours ago",
-    status: "verified",
-    confidence: 95,
-  },
-  {
-    id: 2,
-    content: "Government announces major policy shift in healthcare",
-    source: "National News Network",
-    timestamp: "4 hours ago",
-    status: "pending",
-    confidence: 65,
-  },
-  {
-    id: 3,
-    content: "Viral social media post claims breakthrough in renewable energy",
-    source: "Tech Daily",
-    timestamp: "6 hours ago",
-    status: "false",
-    confidence: 89,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { fetchDashboardStats, fetchRecentBroadcasts } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
+  const { data: stats, isLoading: isLoadingStats } = useQuery({
+    queryKey: ["dashboardStats"],
+    queryFn: fetchDashboardStats,
+  });
+
+  const { data: broadcasts, isLoading: isLoadingBroadcasts } = useQuery({
+    queryKey: ["recentBroadcasts"],
+    queryFn: fetchRecentBroadcasts,
+  });
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -47,8 +25,22 @@ const Index = () => {
             Overview of fact-checking activities and recent broadcasts
           </p>
         </div>
-        <StatsOverview stats={mockStats} />
-        <BroadcastList broadcasts={mockBroadcasts} />
+        
+        {isLoadingStats ? (
+          <div className="grid gap-4 md:grid-cols-3">
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+          </div>
+        ) : stats ? (
+          <StatsOverview stats={stats} />
+        ) : null}
+        
+        {isLoadingBroadcasts ? (
+          <Skeleton className="h-[400px]" />
+        ) : broadcasts ? (
+          <BroadcastList broadcasts={broadcasts} />
+        ) : null}
       </div>
     </DashboardLayout>
   );

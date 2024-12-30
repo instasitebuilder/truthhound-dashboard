@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Broadcast } from "@/types";
 import { CheckCircle, XCircle, Clock } from "lucide-react";
+import { format } from "date-fns";
 
 interface BroadcastListProps {
   broadcasts: Broadcast[];
@@ -37,7 +38,7 @@ export function BroadcastList({ broadcasts }: BroadcastListProps) {
                 </p>
                 <div className="flex items-center pt-2">
                   <span className="text-xs text-muted-foreground">
-                    {broadcast.source} • {broadcast.timestamp}
+                    {broadcast.source} • {format(new Date(broadcast.timestamp || ''), 'PPp')}
                   </span>
                 </div>
               </div>
