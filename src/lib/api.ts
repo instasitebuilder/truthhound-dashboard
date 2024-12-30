@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { Broadcast } from "@/types";
 
 export async function fetchDashboardStats() {
   console.log("Fetching dashboard stats...");
@@ -28,19 +29,19 @@ export async function fetchDashboardStats() {
   };
 }
 
-export async function fetchRecentBroadcasts() {
+export async function fetchRecentBroadcasts(): Promise<Broadcast[]> {
   console.log("Fetching recent broadcasts...");
   
   const { data, error } = await supabase
     .from("broadcasts")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(5);
+    .limit(5) as { data: Broadcast[] | null; error: any };
 
   if (error) {
     console.error("Error fetching broadcasts:", error);
     throw error;
   }
 
-  return data;
+  return data || [];
 }

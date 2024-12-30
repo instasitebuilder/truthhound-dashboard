@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BroadcastList } from "@/components/BroadcastList";
+import { Broadcast } from "@/types";
 
 const Broadcasts = () => {
   const { data: broadcasts, isLoading } = useQuery({
@@ -11,10 +12,10 @@ const Broadcasts = () => {
       const { data, error } = await supabase
         .from("broadcasts")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false }) as { data: Broadcast[] | null; error: any };
 
       if (error) throw error;
-      return data;
+      return data || [];
     },
   });
 
