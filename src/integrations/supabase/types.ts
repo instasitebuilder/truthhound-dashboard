@@ -9,7 +9,80 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      broadcasts: {
+        Row: {
+          confidence: number | null
+          content: string
+          created_at: string | null
+          id: number
+          source: string
+          speaker: string | null
+          status: string | null
+          timestamp: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          content: string
+          created_at?: string | null
+          id?: number
+          source: string
+          speaker?: string | null
+          status?: string | null
+          timestamp?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          content?: string
+          created_at?: string | null
+          id?: number
+          source?: string
+          speaker?: string | null
+          status?: string | null
+          timestamp?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      fact_checks: {
+        Row: {
+          broadcast_id: number | null
+          confidence_score: number | null
+          created_at: string | null
+          explanation: string
+          id: number
+          updated_at: string | null
+          verification_source: string
+        }
+        Insert: {
+          broadcast_id?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          explanation: string
+          id?: number
+          updated_at?: string | null
+          verification_source: string
+        }
+        Update: {
+          broadcast_id?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          explanation?: string
+          id?: number
+          updated_at?: string | null
+          verification_source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fact_checks_broadcast_id_fkey"
+            columns: ["broadcast_id"]
+            isOneToOne: false
+            referencedRelation: "broadcasts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
